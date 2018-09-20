@@ -7,7 +7,7 @@ extern char* builtin_names[] = {
 	"ls"
 };
 
-extern int (*builtin[])(std::vector<char*>) = {
+extern int (*builtin[])(char**) = {
 	cd,
 	pwd,
 	logout,
@@ -18,20 +18,20 @@ int builtins(){
 	return sizeof (builtin_names) / sizeof(char*);
 }
 
-int cd (std::vector<char*> args) {
-    if(!args.empty()) return chdir(args[0]);
+int cd (char** args) {
+    if(args[1] != nullptr) return chdir(args[1]);
     else return chdir(getpwuid(getuid())->pw_dir);
 }
 
-int ls (std::vector<char*> args){
+int ls (char** args){
 
 	char buff[FILENAME_MAX];
 	getcwd(buff, FILENAME_MAX);
 
 	for (auto i : fs::directory_iterator(buff)){
         if (i.path().filename().string()[0] == '.') continue;
-		if (!args.empty())
-		    if (!strcmp(args[0], "--color"))
+		if (args[1] != nullptr)
+		    if (!strcmp(args[1], "--color"))
                 if (fs::is_directory(i.path())) std::cout << fg(blue);
                 else if (
                     ((fs::status(i).permissions() & fs::perms::owner_exec) != fs::perms::none) ||
@@ -44,14 +44,14 @@ int ls (std::vector<char*> args){
 	return 0;
 }
 
-int pwd (std::vector<char*>) {
+int pwd (char**) {
 
 	std::cout << fs::current_path().string() << std::endl;
 
 	return 0;
 }
 
-int logout (std::vector<char*>) {
+int logout (char**) {
 	std::cout << "Bye\n";
 	exit (EXIT_SUCCESS);
 }

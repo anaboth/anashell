@@ -14,14 +14,14 @@
 
 namespace fs = std::experimental::filesystem;
 
-int cd (std::vector<char*>);
-int ls (std::vector<char*>);
-int pwd (std::vector<char*>);
-int logout (std::vector<char*>);
+int cd (char**);
+int ls (char**);
+int pwd (char**);
+int logout (char**);
 
 extern char* builtin_names[];
 
-extern int (*builtin[])(std::vector<char*>);
+extern int (*builtin[])(char**);
 
 int builtins();
 

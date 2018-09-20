@@ -6,17 +6,14 @@ char *convert(const std::string & s){
 	return pc; 
 }
 
-int launch(char* cmd, std::vector<char*> args){
+int launch(char** args){
 	
 	pid_t pid;
 	pid_t wpid;
 	int status;
-	if (args.empty())
-		args.push_back(cmd);
-	else
-		args.insert(args.begin(), cmd);
+
 	if ((pid = fork()) == 0){
-		if(execvp(cmd, &args[0]) == -1) exit(EXIT_FAILURE);
+		if(execvp(args[0], args) == -1) exit(EXIT_FAILURE);
 	} else if (pid < 0){
 		perror("Fork error");
 		return -1;
@@ -28,20 +25,28 @@ int launch(char* cmd, std::vector<char*> args){
 	return 0;
 }
 
-std::vector<char*> split_string(std::string string, std::string delimiter){
-	std::vector<std::string> vec;
-	std::vector<char*> ret;
+char** split_string(std::string string, std::string delimiter){
+	int bufsize = 16;
+	char** arr = (char**)malloc(bufsize * sizeof(char*));
+
+	int i = 0;
 	size_t pos;
-
-	while (std::string::npos != (pos = string.find(delimiter))){
-		vec.push_back(string.substr(0, pos));
-		string.erase(string.begin(), string.begin() + pos + delimiter.length());
+	while(std::string::npos != (pos = string.find(delimiter))){
+		if(i > bufsize){
+			bufsize+=bufsize;
+			arr = (char**)realloc(arr, bufsize * sizeof(char*));
+		}
+		arr[i] = (char*)malloc(string.substr(0, pos).length() * sizeof(char) + 2);
+		strcpy(arr[i], (char*)string.substr(0, pos).c_str());
+		string.erase(0, pos + delimiter.length());
+		i++;
+		// printf("%d\n",i);
 	}
-	vec.push_back(string);
+	arr[i] = (char*)malloc(string.length() * sizeof(char));
+	strcpy(arr[i], (char*)string.c_str());
+	arr[++i] = nullptr;
 
-	std::transform(vec.begin(), vec.end(), std::back_inserter(ret), convert);
-	string.clear();
-	return ret;
+	return arr;
 }
 
 std::string pretty_cwd(){

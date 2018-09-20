@@ -14,8 +14,8 @@
 #include <unistd.h>
 
 char *convert(const std::string & s);
-std::vector<char*> split_string(std::string string, std::string delimiter);
+char** split_string(std::string string, std::string delimiter);
 std::string pretty_cwd();
-int launch(char*, std::vector<char*>);
+int launch(char**);
 
 #endif
