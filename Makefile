@@ -1,5 +1,10 @@
+CPP_FILES := $(wildcard src/*.cpp)
+CC_FLAGS := -std=c++17 -lstdc++fs
+CC := clang++-6.0
+WARNS := -w
+
 all:
-	clang++-6.0 src/anash.cpp  src/builtin.cpp src/utils.cpp src/colors.cpp -std=c++17 -lstdc++fs -o anashell
+	$(CC) $(CPP_FILES) -o anashell $(CC_FLAGS) $(WARNS)
 
 clean:
 	rm anashell
