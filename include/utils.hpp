@@ -8,10 +8,14 @@
 #include <experimental/filesystem>
 #include <sys/types.h>
 #include <pwd.h>
+#include <wait.h>
+#include <stdlib.h>
+#include <iostream>
 #include <unistd.h>
 
 char *convert(const std::string & s);
 std::vector<char*> split_string(std::string string, std::string delimiter);
 std::string pretty_cwd();
+int launch(char*, std::vector<char*>);
 
 #endif
