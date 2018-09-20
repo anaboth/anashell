@@ -1,4 +1,4 @@
-#include "colors.hpp"
+#include "../include/colors.hpp"
 
 std::string fg(int color){
     std::string s;

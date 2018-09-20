@@ -1,6 +1,6 @@
-#include "colors.hpp"
-#include "builtin.hpp"
-#include "utils.hpp"
+#include "../include/colors.hpp"
+#include "../include/builtin.hpp"
+#include "../include/utils.hpp"
 
 int main(int argc, char** argv){
 	char* cmd;
